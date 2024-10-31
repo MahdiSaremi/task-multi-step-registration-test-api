@@ -8,4 +8,7 @@ Route::controller(UserController::class)->group(function ()
 {
     Route::get('/getUser', 'getUser');
     Route::get('/updateEmailPassword', 'updateEmailPhone');
+    Route::get('/updatePassword', 'updatePassword');
+    Route::get('/updatePersonalInfo', 'updatePersonalInfo');
+    Route::get('/finish', 'finish');
 });

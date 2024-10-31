@@ -57,6 +57,15 @@ class UserController extends Controller
         return response()->json(true);
     }
 
+    public function finish(Request $request)
+    {
+        $user = $this->findUser($request);
+
+        // Nothing to do here
+
+        return response()->json(true);
+    }
+
 
     protected function findUser(Request $request) : User
     {
