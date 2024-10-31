@@ -14,43 +14,22 @@ class UserController extends Controller
         return $this->findUser($request);
     }
 
-    public function updateEmailPhone(Request $request)
+    public function update(Request $request)
     {
         $user = $this->findUser($request);
 
         $data = $request->validate([
-            'email' => 'required|string|email',
-            'phone' => ['required', 'string', 'regex:/^(+?98|0)?\d{11}$/'],
+            'email' => 'nullable|string|email',
+            'phone' => ['nullable', 'string', 'regex:/^(+?98|0)?\d{11}$/'],
+            'password' => 'nullable|string|min:8',
+            'name' => 'nullable|string|min:2|max:50',
+            'address' => 'nullable|string|max:150',
         ]);
 
-        $user->update($data);
-
-        return response()->json(true);
-    }
-
-    public function updatePassword(Request $request)
-    {
-        $user = $this->findUser($request);
-
-        $data = $request->validate([
-            'password' => 'required|string|min:8',
-        ]);
-
-        $user->update([
-            'password' => Hash::make($data['password']),
-        ]);
-
-        return response()->json(true);
-    }
-
-    public function updatePersonalInfo(Request $request)
-    {
-        $user = $this->findUser($request);
-
-        $data = $request->validate([
-            'name' => 'required|string|min:2|max:50',
-            'address' => 'required|string|max:150',
-        ]);
+        if (isset($data['password']))
+        {
+            $data['password'] = Hash::make($data['password']);
+        }
 
         $user->update($data);
 
