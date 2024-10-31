@@ -8,5 +8,5 @@ Route::controller(UserController::class)->group(function ()
 {
     Route::post('/getUser', 'getUser');
     Route::post('/update', 'update');
-    Route::post('/finish', 'finish');
+    Route::post('/verify', 'verify');
 });

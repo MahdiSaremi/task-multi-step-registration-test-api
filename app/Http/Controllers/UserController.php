@@ -3,20 +3,32 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Repositories\UserRepository;
+use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
 
+    public function __construct(
+        protected UserRepository $userRepository,
+        protected UserService $userService,
+    )
+    {
+    }
+
     public function getUser(Request $request)
     {
-        return $this->findUser($request);
+        $id = $request->validate(['id' => 'required|int'])['id'];
+
+        return $this->userRepository->findOrFail($id);
     }
 
     public function update(Request $request)
     {
-        $user = $this->findUser($request);
+        $id = $request->validate(['id' => 'required|int'])['id'];
+        $user = $this->userRepository->findOrFail($id);
 
         $data = $request->validate([
             'email' => 'nullable|string|email',
@@ -26,31 +38,19 @@ class UserController extends Controller
             'address' => 'nullable|string|max:150',
         ]);
 
-        if (isset($data['password']))
-        {
-            $data['password'] = Hash::make($data['password']);
-        }
-
-        $user->update($data);
-
-        return response()->json(true);
+        return response()->json(
+            $this->userService->update($user, $data)
+        );
     }
 
-    public function finish(Request $request)
+    public function verify(Request $request)
     {
-        $user = $this->findUser($request);
+        $id = $request->validate(['id' => 'required|int'])['id'];
+        $user = $this->userRepository->findOrFail($id);
 
         // Nothing to do here
 
         return response()->json(true);
-    }
-
-
-    protected function findUser(Request $request) : User
-    {
-        $id = $request->validate(['id' => 'required|int'])['id'];
-
-        return User::findOrFail($id);
     }
 
 }
