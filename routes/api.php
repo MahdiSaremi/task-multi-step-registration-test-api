@@ -9,4 +9,5 @@ Route::controller(UserController::class)->group(function ()
     Route::post('/getUser', 'getUser');
     Route::post('/update', 'update');
     Route::post('/verify', 'verify');
+    Route::post('/upload', 'upload');
 });

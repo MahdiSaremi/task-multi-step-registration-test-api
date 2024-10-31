@@ -5,7 +5,9 @@ namespace App\Services;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserService
 {
@@ -24,6 +26,19 @@ class UserService
         }
 
         return $user->update($data);
+    }
+
+    public function confirmPhone(User $user, string $code) : bool
+    {
+        return $code == '1234';
+    }
+
+    public function upload(UploadedFile $file)
+    {
+        $uuid = Str::uuid();
+        $file->storeAs(public_path('files/' . $uuid . '.' . $file->extension()));
+
+        return $uuid;
     }
 
 }
